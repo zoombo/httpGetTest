@@ -1,11 +1,11 @@
 #pragma once
 #include "mainh.h"
 
-// Это для задействования Dll библиотеки винды отвечающей за сокеты.
+// Р­С‚Рѕ РґР»СЏ Р·Р°РґРµР№СЃС‚РІРѕРІР°РЅРёСЏ Dll Р±РёР±Р»РёРѕС‚РµРєРё РІРёРЅРґС‹ РѕС‚РІРµС‡Р°СЋС‰РµР№ Р·Р° СЃРѕРєРµС‚С‹.
 int init_WSAlib(int a, int b) {
 	WSAData wsaData;
 	WORD DllVersion = MAKEWORD(a, b);
-	if (FAILED(WSAStartup(DllVersion, &wsaData))) { // Если все норм. WSAStartup вернет 0 если ошибка !=0.
+	if (FAILED(WSAStartup(DllVersion, &wsaData))) { // Р•СЃР»Рё РІСЃРµ РЅРѕСЂРј. WSAStartup РІРµСЂРЅРµС‚ 0 РµСЃР»Рё РѕС€РёР±РєР° !=0.
 		cout << "Error init winsock." << endl;
 		return WSAGetLastError();
 	}
@@ -14,13 +14,13 @@ int init_WSAlib(int a, int b) {
 
 int get_data(int argc, char **argv, vector<char*> &buffer) {
 
-	// Это для задействования Dll библиотеки винды отвечающей за сокеты.
+	// Р­С‚Рѕ РґР»СЏ Р·Р°РґРµР№СЃС‚РІРѕРІР°РЅРёСЏ Dll Р±РёР±Р»РёРѕС‚РµРєРё РІРёРЅРґС‹ РѕС‚РІРµС‡Р°СЋС‰РµР№ Р·Р° СЃРѕРєРµС‚С‹.
 	if (FAILED(init_WSAlib(2, 1)))
 		return WSAGetLastError();
 
-	// Установим параметры по умолчанию чтобы не ловить segfault'ы.
+	// РЈСЃС‚Р°РЅРѕРІРёРј РїР°СЂР°РјРµС‚СЂС‹ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ С‡С‚РѕР±С‹ РЅРµ Р»РѕРІРёС‚СЊ segfault'С‹.
 	char *host = "localhost", *port = "80", *URI = "/", *debug = "no_debug";
-	// Тут меняем умолчальные параметры на заданные, если они есть.
+	// РўСѓС‚ РјРµРЅСЏРµРј СѓРјРѕР»С‡Р°Р»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РЅР° Р·Р°РґР°РЅРЅС‹Рµ, РµСЃР»Рё РѕРЅРё РµСЃС‚СЊ.
 	for (int i = 1; i < argc; i++)
 		switch (i)
 		{
@@ -40,18 +40,18 @@ int get_data(int argc, char **argv, vector<char*> &buffer) {
 			break;
 		}
 
-	//Основной цикл.
+	//РћСЃРЅРѕРІРЅРѕР№ С†РёРєР».
 	for (;;) {
 
 		extern int exit_flag;
 
-		// Проверка нажатия клавиши.
+		// РџСЂРѕРІРµСЂРєР° РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€Рё.
 		if (exit_flag)
 			break;
 
-		// Создаем сокет.
+		// РЎРѕР·РґР°РµРј СЃРѕРєРµС‚.
 		SOCKET mysocket;
-		// MSDN: Если всё норм, socket() вернет дескриптор сокета, если ошибка, вернется INVALID_SOCKET. 
+		// MSDN: Р•СЃР»Рё РІСЃС‘ РЅРѕСЂРј, socket() РІРµСЂРЅРµС‚ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРєРµС‚Р°, РµСЃР»Рё РѕС€РёР±РєР°, РІРµСЂРЅРµС‚СЃСЏ INVALID_SOCKET. 
 		if (INVALID_SOCKET == (mysocket = socket(AF_INET, SOCK_STREAM, 0))) {
 			int error = WSAGetLastError();
 			cout << "Error create socket. Error code : %d" << error << endl;
@@ -59,7 +59,7 @@ int get_data(int argc, char **argv, vector<char*> &buffer) {
 			return 1;
 		}
 
-		// Резолвим hostname.
+		// Р РµР·РѕР»РІРёРј hostname.
 		struct addrinfo hints, *servinfo;
 		ZeroMemory(&hints, sizeof(hints));
 		hints.ai_family = AF_INET;
@@ -72,12 +72,12 @@ int get_data(int argc, char **argv, vector<char*> &buffer) {
 		}
 
 		/* Remember!
-		В структуре addrinfo поле типа ai_addr, является, указателем на структуру типа sockaddr
-		которая, может быть приведена к структуре типа sockaddr_in которая, используется вызовом connect.
-		Нагляднее будет создать еще одну структуру sockaddr_in и скопировать поля, но это будет лишняя трата памяти.
+		Р’ СЃС‚СЂСѓРєС‚СѓСЂРµ addrinfo РїРѕР»Рµ С‚РёРїР° ai_addr, СЏРІР»СЏРµС‚СЃСЏ, СѓРєР°Р·Р°С‚РµР»РµРј РЅР° СЃС‚СЂСѓРєС‚СѓСЂСѓ С‚РёРїР° sockaddr
+		РєРѕС‚РѕСЂР°СЏ, РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСЂРёРІРµРґРµРЅР° Рє СЃС‚СЂСѓРєС‚СѓСЂРµ С‚РёРїР° sockaddr_in РєРѕС‚РѕСЂР°СЏ, РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІС‹Р·РѕРІРѕРј connect.
+		РќР°РіР»СЏРґРЅРµРµ Р±СѓРґРµС‚ СЃРѕР·РґР°С‚СЊ РµС‰Рµ РѕРґРЅСѓ СЃС‚СЂСѓРєС‚СѓСЂСѓ sockaddr_in Рё СЃРєРѕРїРёСЂРѕРІР°С‚СЊ РїРѕР»СЏ, РЅРѕ СЌС‚Рѕ Р±СѓРґРµС‚ Р»РёС€РЅСЏСЏ С‚СЂР°С‚Р° РїР°РјСЏС‚Рё.
 		*/
 
-		// Соединяемся с сервером используя созданный сокет.
+		// РЎРѕРµРґРёРЅСЏРµРјСЃСЏ СЃ СЃРµСЂРІРµСЂРѕРј РёСЃРїРѕР»СЊР·СѓСЏ СЃРѕР·РґР°РЅРЅС‹Р№ СЃРѕРєРµС‚.
 		sockaddr_in *s_maddr = (sockaddr_in*)servinfo->ai_addr; DEBUG_1
 			// MSDN: If no error occurs, connect returns zero. Otherwise, it returns SOCKET_ERROR...
 			if (SOCKET_ERROR == (connect(mysocket, (sockaddr*)s_maddr, sizeof(*s_maddr)))) {
@@ -87,7 +87,7 @@ int get_data(int argc, char **argv, vector<char*> &buffer) {
 				return 1;
 			}
 
-		// Формируем HTTP-запрос.
+		// Р¤РѕСЂРјРёСЂСѓРµРј HTTP-Р·Р°РїСЂРѕСЃ.
 		stringstream raw_req;
 		string final_req;
 		raw_req << "GET " << URI << " HTTP/1.1\r\n";
@@ -96,7 +96,7 @@ int get_data(int argc, char **argv, vector<char*> &buffer) {
 
 		DEBUG_2;
 
-		// Отправляем...
+		// РћС‚РїСЂР°РІР»СЏРµРј...
 		/*
 		MSDN: If no error occurs, send returns the total number of bytes sent,
 		which can be less than the number requested to be sent in the len parameter.
@@ -111,17 +111,17 @@ int get_data(int argc, char **argv, vector<char*> &buffer) {
 
 		extern mutex mainMut;
 		mainMut.lock();
-		// Принимаем ответ.
-		vector<char*>::iterator new_item(buffer.end()); // Можно просто "buffer.insert(buffer.begin(), "")" , но так нагладянее. Наверное...
-		buffer.insert(new_item, ""); // Резервируем в векторе один элемент типа char*.
-									 // Запрашиваем 1 Mb памяти у системы и указатель на начало выделенной 
-									 // памяти присваиваем 0-му элементу вектора.
+		// РџСЂРёРЅРёРјР°РµРј РѕС‚РІРµС‚.
+		vector<char*>::iterator new_item(buffer.end()); // РњРѕР¶РЅРѕ РїСЂРѕСЃС‚Рѕ "buffer.insert(buffer.begin(), "")" , РЅРѕ С‚Р°Рє РЅР°РіР»Р°РґСЏРЅРµРµ. РќР°РІРµСЂРЅРѕРµ...
+		buffer.insert(new_item, ""); // Р РµР·РµСЂРІРёСЂСѓРµРј РІ РІРµРєС‚РѕСЂРµ РѕРґРёРЅ СЌР»РµРјРµРЅС‚ С‚РёРїР° char*.
+		// Р—Р°РїСЂР°С€РёРІР°РµРј 1 Mb РїР°РјСЏС‚Рё Сѓ СЃРёСЃС‚РµРјС‹ Рё СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С‡Р°Р»Рѕ РІС‹РґРµР»РµРЅРЅРѕР№ 
+		// РїР°РјСЏС‚Рё РїСЂРёСЃРІР°РёРІР°РµРј 0-РјСѓ СЌР»РµРјРµРЅС‚Сѓ РІРµРєС‚РѕСЂР°.
 		buffer.back() = (char*)calloc(ONE_MB, sizeof(char));
-		unsigned long int final_message_len = 0; // Финальный размер буфера.
-		int message_len = 0; DEBUG_4; // Длинна ответа. (Количество считанных байт.)
+		unsigned long int final_message_len = 0; // Р¤РёРЅР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ Р±СѓС„РµСЂР°.
+		int message_len = 0; DEBUG_4; // Р”Р»РёРЅРЅР° РѕС‚РІРµС‚Р°. (РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‡РёС‚Р°РЅРЅС‹С… Р±Р°Р№С‚.)
 
 		do {
-			// Передаем в функцию указатель на начало участка памяти(массива), достаточного чтобы принять ONE_MB данных. 
+			// РџРµСЂРµРґР°РµРј РІ С„СѓРЅРєС†РёСЋ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С‡Р°Р»Рѕ СѓС‡Р°СЃС‚РєР° РїР°РјСЏС‚Рё(РјР°СЃСЃРёРІР°), РґРѕСЃС‚Р°С‚РѕС‡РЅРѕРіРѕ С‡С‚РѕР±С‹ РїСЂРёРЅСЏС‚СЊ ONE_MB РґР°РЅРЅС‹С…. 
 			/*
 			MSDN: If no error occurs, recv returns the number of bytes received and the buffer pointed to by the buf parameter
 			will contain this data received. If the connection has been gracefully closed, the return value is zero.
@@ -132,21 +132,20 @@ int get_data(int argc, char **argv, vector<char*> &buffer) {
 				cout << "Receive message error. Error code : %d" << error << endl;
 				return 1;
 			}
-			final_message_len += message_len; // Длинна(общая) уже записанного в буфер сообщения.
-											  // Увеличиваем буфер на ONE_MB. (А точнее перемещаем в новое место которое больше предыдущего на ONE_MB. См. realloc() )
+			final_message_len += message_len; // Р”Р»РёРЅРЅР°(РѕР±С‰Р°СЏ) СѓР¶Рµ Р·Р°РїРёСЃР°РЅРЅРѕРіРѕ РІ Р±СѓС„РµСЂ СЃРѕРѕР±С‰РµРЅРёСЏ.
+			// РЈРІРµР»РёС‡РёРІР°РµРј Р±СѓС„РµСЂ РЅР° ONE_MB. (Рђ С‚РѕС‡РЅРµРµ РїРµСЂРµРјРµС‰Р°РµРј РІ РЅРѕРІРѕРµ РјРµСЃС‚Рѕ РєРѕС‚РѕСЂРѕРµ Р±РѕР»СЊС€Рµ РїСЂРµРґС‹РґСѓС‰РµРіРѕ РЅР° ONE_MB. РЎРј. realloc() )
 			buffer.back() = (char*)realloc(buffer.back(), final_message_len + ONE_MB);
-		} while (message_len > 0); // Работать пока не считаются все данные.
+		} while (message_len > 0); // Р Р°Р±РѕС‚Р°С‚СЊ РїРѕРєР° РЅРµ СЃС‡РёС‚Р°СЋС‚СЃСЏ РІСЃРµ РґР°РЅРЅС‹Рµ.
 
-		*(buffer.back() + final_message_len) = '\0'; // В стиле Pure C но, пока так.
+		*(buffer.back() + final_message_len) = '\0'; // Р’ СЃС‚РёР»Рµ Pure C РЅРѕ, РїРѕРєР° С‚Р°Рє.
 		mainMut.unlock();
 		closesocket(mysocket);
 
-		extern int sleep_timeout;
-		// Сдесь и в функции "main", задать произвольные значения 
-		// или закомментировать в разной последовательности для проверки.
-		Sleep(sleep_timeout);
+		extern int sleep_timeout; 
+		// РЎРґРµСЃСЊ Рё РІ С„СѓРЅРєС†РёРё "main", Р·Р°РґР°С‚СЊ РїСЂРѕРёР·РІРѕР»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ 
+		// РёР»Рё Р·Р°РєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ РІ СЂР°Р·РЅРѕР№ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё РґР»СЏ РїСЂРѕРІРµСЂРєРё.
+		Sleep(sleep_timeout); 
 		DEBUG_6;
 	}
 	return 0;
 }
-
