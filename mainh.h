@@ -10,7 +10,7 @@
 #include <conio.h>
 #include "debugsh.h"
 
-#define MYBUFFER_LEN 10485760 // 10 Mb - размер буфера для ответа.
+#define MYBUFFER_LEN 10485760 // 10 Mb - СЂР°Р·РјРµСЂ Р±СѓС„РµСЂР° РґР»СЏ РѕС‚РІРµС‚Р°.
 #define ONE_MB 1048576 // 1 Mb
 #define ESC 27
 #define TEST
