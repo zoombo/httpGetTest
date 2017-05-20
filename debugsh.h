@@ -10,7 +10,7 @@
 				cout << (int)s_maddr->sin_addr.S_un.S_un_b.s_b3 << endl; \
 				cout << (int)s_maddr->sin_addr.S_un.S_un_b.s_b4 << endl; \
 				char src[INET_ADDRSTRLEN]; \
-				cout << inet_ntop(AF_INET, (void*)&(s_maddr->sin_addr), src, INET_ADDRSTRLEN) << endl << endl; /* Выводим адрес в "нормальном" формате. */ \
+				cout << inet_ntop(AF_INET, (void*)&(s_maddr->sin_addr), src, INET_ADDRSTRLEN) << endl << endl; /* Р’С‹РІРѕРґРёРј Р°РґСЂРµСЃ РІ "РЅРѕСЂРјР°Р»СЊРЅРѕРј" С„РѕСЂРјР°С‚Рµ. */ \
 				END_DEBUG
 
 #define DEBUG_2 DEBUG \
